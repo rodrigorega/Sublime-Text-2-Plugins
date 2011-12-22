@@ -21,7 +21,7 @@ Copy **[blame.py](https://github.com/ehamiter/Sublime-Text-2-Plugins/raw/master/
 Usage
 -----
 
-Select text or click desired line(s), then activate. 
+Select text or click desired line(s), then activate.
 
 I've added this to my User Key Bindings (&#8984;-&#8997;-b on a Mac):
 
@@ -49,7 +49,7 @@ Copy **[googleIt.py](https://github.com/ehamiter/Sublime-Text-2-Plugins/raw/mast
 Usage
 -----
 
-Select text or click desired word, then activate. 
+Select text or click desired word, then activate.
 
 I've added this to my User Key Bindings (&#8963;-&#8997;-/ on a Mac):
 
@@ -104,7 +104,7 @@ Usage
 -----
 
 I've added this to my User Key Bindings (&#8984;-&#8679;-8 on a Mac):
-    
+
     { "keys": ["super+shift+8"], "command": "pep8_check" }
 
 ...and this in User/Default\_(your OS)\_Context.sublime-menu, which allows context menu access:
@@ -127,8 +127,30 @@ Copy **[settings_refresh.py](https://github.com/ehamiter/Sublime-Text-2-Plugins/
 Usage
 -----
 
-After editing / adding / deleting a setting, or Theme, or Color Scheme, activate to refresh the changes. 
+After editing / adding / deleting a setting, or Theme, or Color Scheme, activate to refresh the changes.
 
 I've added this to my User Key Bindings (&#8963;-&#8984;-r on a Mac):
 
     { "keys": ["super+ctrl+r"], "command": "settings_refresh" }
+
+
+whitespace.py
+===================
+
+whitespace.py contains a few different pre-save handlers to manage whitespace, including the ability to
+trim trailing whitespace, ensure a single empty line at the end of a file, and convert tabs to spaces.
+
+
+Installation
+------------
+
+Copy **whitespace.py** into your ST2 User packages folder *(Sublime Text 2 > Preferences > Browse Packages... > User)*, and then set the appropriate settings (ensure_newline_at_eof_on_save, trim_trailing_white_space_on_save,
+expand_tabs_on_save) in your preferences file, i.e.
+
+    {'trim_trailing_white_space_on_save': true}.
+
+
+Usage
+-----
+
+Edit a file and save!
