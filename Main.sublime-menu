@@ -1,0 +1,22 @@
+[
+    {
+        "id": "tools",
+        "children":
+        [
+            {
+                "caption": "Python stuff",
+                "children":
+                [
+                    {
+                        "caption": "PEP8 Validate",
+                        "command": "pep8_check"
+                    }
+                ]
+            },
+            {
+                "caption": "PEP8 Validate",
+                "command": "pep8_check"
+            }
+        ]
+    }
+]
