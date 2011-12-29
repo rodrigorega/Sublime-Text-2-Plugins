@@ -1,45 +1,53 @@
 import os
+import re
+from subprocess import Popen
+from subprocess import PIPE
+
 import sublime
 import sublime_plugin
 
 
 class Pep8CheckCommand(sublime_plugin.TextCommand):
 
-    """This will invoke PEP8 checking on the given file.
-    pep8.py must be in your system's path for this to work.
+    """ This will invoke PEP8 checking on the given file and
+    provide a pop-up with validation errors that will jump to
+    the line-in-question.
 
-    http://pypi.python.org/pypi/pep8
-
-    Options:
-    --version            show program's version number and exit
-    --help               show this help message and exit
-    --verbose            print status messages, or debug with -vv
-    --quiet              report only file names, or nothing with -qq
-    --repeat             show all occurrences of the same error
-    --exclude=patterns   exclude files or directories which match these comma
-                         separated patterns (default: .svn,CVS,.bzr,.hg,.git)
-    --filename=patterns  when parsing directories, only check filenames
-                       matching these comma separated patterns (default: *.py)
-    --select=errors      select errors and warnings (e.g. E,W6)
-    --ignore=errors      skip errors and warnings (e.g. E4,W)
-    --show-source        show source code for each error
-    --show-pep8          show text of PEP 8 for each error
-    --statistics         count errors and warnings
-    --count              print total number of errors and warnings to standard
-                       error and set exit code to 1 if total is not null
-    --benchmark          measure processing speed
-    --testsuite=dir      run regression tests from dir
-    --doctest            run doctest on myself
+    The pep8 executable must be in your system's path for this to work.
     """
+
+    def goto_line(self, index):
+        # TODO: Use goto line Command, highline line...
+
+        if index >= 0:
+            line = int(self.index_to_line[index]) - 1
+
+            sublime.status_message("PEP8: %s" % self.errors[index])
+
+            pt = self.view.text_point(line, 0)
+
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(pt))
+
+            self.view.show(pt)
+        else:
+            sublime.status_message("PEP8 Valid!")
 
     def run(self, edit):
         if self.view.file_name().endswith('.py'):
-            folder_name, file_name = os.path.split(self.view.file_name())
-            self.view.window().run_command('exec', {'cmd': ['pep8',         \
-                '--repeat', '--verbose', '--ignore=E501', '--show-source',  \
-                '--statistics', '--count',                                  \
-                 file_name], 'working_dir': folder_name})
-            sublime.status_message("pep8 " + file_name)
+            sublime.status_message("Running PEP8 " + self.view.file_name())
+            output = Popen(["/usr/local/bin/pep8", self.view.file_name()],
+                                                stdout=PIPE).communicate()[0]
+            self.errors = []
+            self.index_to_line = {}
+            pep8_regex = re.compile('(.*):(.*):(.*): (....) (.*)')
+            for line in output.split('\n'):
+                if len(line) > 0:
+                    _, row, col, err, msg = re.match(pep8_regex, line).groups()
+                    self.index_to_line[len(self.errors)] = row
+                    self.errors.append("Line %s: %s %s" % (row, err, msg))
+
+            self.view.window().show_quick_panel(self.errors, self.goto_line)
 
     def is_enabled(self):
-        return self.view.file_name().endswith('.py')
+        return self.view.file_name() and self.view.file_name().endswith('.py')
