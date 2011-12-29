@@ -1,38 +1,37 @@
-import sublime, sublime_plugin
+import os
+import sublime
+import sublime_plugin
 
-class ExpandTabs(sublime_plugin.EventListener):
+
+class WhitespaceListener(sublime_plugin.EventListener):
     def on_pre_save(self, view):
-        if view.settings().get("expand_tabs_on_save") == True:
+        if view.settings().get('expand_tabs_on_save') == True:
             view.run_command('expand_tabs')
+        if view.settings().get('trim_trailing_whitespace_on_save') == True:
+            view.run_command('trim_trailing_whitespace')
+        if view.settings().get('ensure_newline_at_eof_on_save') == True:
+            view.run_command('ensure_newline_at_eof')
+        # view.run_command('pep8_check')
 
-class TrimTrailingWhiteSpace(sublime_plugin.EventListener):
-    def on_pre_save(self, view):
-        if view.settings().get("trim_trailing_white_space_on_save") == True:
-            trailing_white_space = view.find_all("[\t ]+$")
-            trailing_white_space.reverse()
-            edit = view.begin_edit()
-            for r in trailing_white_space:
-                view.erase(edit, r)
-            view.end_edit(edit)
 
-class EnsureNewlineAtEof(sublime_plugin.EventListener):
-    def on_pre_save(self, view):
-        if view.settings().get("ensure_newline_at_eof_on_save") == True:
-            # Remove up to 'max_lines' empty lines on save
-            max_lines = 20
-            i = 0
-            edit = view.begin_edit()
-            while i <= max_lines and view.size() > 0 and view.substr(view.full_line(view.size() - 1)) == '\n':
-                i = i + 1
-                # print "%d: Last line is a newline, removing" % i
-                view.erase(edit, view.full_line(int(view.size() - 1)))
+class TrimTrailingWhitespace(sublime_plugin.TextCommand):
+    def run(self, edit):
+        trailing_white_space = self.view.find_all("[\t ]+$").reverse()
+        for match in trailing_white_space:
+            self.view.erase(edit, match)
+        self.view.end_edit(edit)
 
-            # Only apply last 'max_lines' edits
-            if i < max_lines:
-                view.end_edit(edit)
-            # Add a newline if necesary
-            if view.size() > 0 and view.substr(view.size() - 1) != '\n':
-                # print "Last line is NOT a newline, adding..."
-                edit = view.begin_edit()
-                view.insert(edit, view.size(), "\n")
-                view.end_edit(edit)
+
+class EnsureNewlineAtEof(sublime_plugin.TextCommand):
+    def run(self, edit):
+        max_removals = self.view.settings().get('max_newline_removals', 20)
+        for i in range(max_removals):
+            size = self.view.size()
+            last_line = self.view.full_line(size - 1)
+            if size > 0 and self.view.substr(last_line) == '\n':
+                self.view.erase(edit, last_line)
+
+        if not self.view.substr(last_line).endswith('\n'):
+            self.view.insert(edit, self.view.size(), '\n')
+
+        self.view.end_edit(edit)
