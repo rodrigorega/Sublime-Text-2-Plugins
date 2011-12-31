@@ -17,7 +17,8 @@ class Pep8CheckCommand(sublime_plugin.TextCommand):
     """
 
     def goto_error(self, index):
-        # TODO: Highline line...
+        # TODO: Highlight line...
+        # TODO: Goto column
 
         if index >= 0:
             line = int(self.index_to_line[index]) - 1
