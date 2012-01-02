@@ -74,7 +74,7 @@ class PythonValidateCommand(sublime_plugin.TextCommand):
     def add_error(self, row, msg, err):
         """Adds a validation error"""
         ignored_ids_key = '%s_ignored_ids' % self.validator()
-        ignored_ids = []  # self.view.settings().get(ignored_ids_key, [])
+        ignored_ids = self.view.settings().get(ignored_ids_key, [])
         if err not in ignored_ids:
             self.index_to_line[len(self.errors)] = row
             self.errors.append('Line %s: %s' % (row, msg))
