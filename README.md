@@ -11,6 +11,14 @@ end of a file, and expanding tabs into spaces.
 There are specific commands to achieve each of these, as well as an
 EventListener with settings to run these commands automatically on-save.
 
+```
+{
+    'expand_tabs_on_save': true,
+    'trim_trailing_whitespace_on_save': true,
+    'ensure_newline_at_eof_on_save': true
+}
+```
+
 ## python_validation.py
 
 This plugin provides a GUI facility for running common python validation
@@ -19,4 +27,11 @@ pop-ups a list of validation errors, and allows the user to jump to the
 offending line.
 
 You can ignore specific pylint and pep8 errors by specifying an array of ignored
-error codes in 'pylint_ignored_ids' or 'pep8_ignored_ids'.
+error codes in 'pylint_ignored_ids' or 'pep8_ignored_ids':
+
+```
+{
+    'pep8_ignored_ids': ['E501'], // Ignore long line errors
+    'pylint_ignored_ids': ['C0111'] // Ignore docstring errors
+}
+```
