@@ -9,17 +9,21 @@
                 [
                     {
                         "caption": "PEP8 Validate",
-                        "command": "pep8_check"
+                        "command": "pep8_validate"
                     },
                     {
                         "caption": "Pylint Validate",
-                        "command": "pylint_check"
+                        "command": "pylint_validate"
                     }
                 ]
             },
             {
+                "caption": "Pylint Validate",
+                "command": "pylint_validate"
+            },
+            {
                 "caption": "PEP8 Validate",
-                "command": "pep8_check"
+                "command": "pep8_validate"
             }
         ]
     }
