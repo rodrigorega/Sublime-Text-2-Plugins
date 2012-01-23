@@ -35,3 +35,18 @@ error codes in 'pylint_ignored_ids' or 'pep8_ignored_ids':
     'pylint_ignored_ids': ['C0111'] // Ignore docstring errors
 }
 ```
+
+###Installation
+Copy **Main.sublime-menu**, **Context.sublime-menu** and **python_validation.py** into your Sublime Text 2 User packages folder *(Sublime Text 2 > Preferences > Browse Packages... > User)*
+
+**This plugin is dependent on pep8 and pylint, which you must install yourself.** You can install, upgrade, uninstall pep8.py with these commands:
+
+
+    $ sudo pip install pep8
+    $ sudo pip install --upgrade pep8
+    $ sudo pip uninstall pep8
+ 
+
+    $ sudo pip install pylint
+    $ sudo pip install --upgrade pylint
+    $ sudo pip uninstall pylint

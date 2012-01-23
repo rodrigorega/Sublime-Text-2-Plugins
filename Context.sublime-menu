@@ -1,4 +1,4 @@
 [
     { "caption": "-", "id": "file" },
-    { "command": "pep8_check", "caption": "PEP8 Check" }
+    { "command": "pep8_validate", "caption": "PEP8 Check" }
 ]
