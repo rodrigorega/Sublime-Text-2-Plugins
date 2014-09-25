@@ -1,14 +1,17 @@
 import os.path
 import re
 import subprocess
+#import sys
 
 import sublime
 import sublime_plugin
 
 
 def find_binary(name):
+    #winDir = os.path.join(sys.prefix, "Scripts")  # Why this is not working?
+    winDir = 'C:\Python27\Scripts'
     dirs = ['/usr/local/sbin', '/usr/local/bin', '/usr/sbin',
-            '/usr/bin', '/sbin', '/bin']
+            '/usr/bin', '/sbin', '/bin', winDir]
     for directory in dirs:
         path = os.path.join(directory, name)
         if os.path.exists(path):
@@ -92,7 +95,10 @@ class Pep8ValidateCommand(PythonValidateCommand):
     The pep8 executable must be in your system's path for this to work.
     """
     def validator(self):
-        return "pep8"
+        if os.name == 'nt':
+            return "pep8.exe"
+        else:
+            return "pep8"
 
     def validate(self):
         output = self.execute(['--repeat'])
@@ -111,7 +117,10 @@ class PylintValidateCommand(PythonValidateCommand):
     The pylint executable must be in your system's path fro this to work.
     """
     def validator(self):
-        return "pylint"
+        if os.name == 'nt':
+            return "pylint.exe"
+        else:
+            return "pylint"
 
     def validate(self):
         output = self.execute(['--reports=no', '--include-ids=yes'])
